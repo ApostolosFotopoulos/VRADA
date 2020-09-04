@@ -1,0 +1,23 @@
+14a15,16
+>         private BicycleCommunicator bicycleCommunicator;
+> 
+25a28,34
+>             if(this.gameObject.GetComponent<BicycleCommunicator>() == null){
+>                 this.gameObject.AddComponent<BicycleCommunicator>();
+>             }
+>             if(!this.gameObject.GetComponent<BicycleCommunicator>().enabled){
+>                 this.gameObject.GetComponent<BicycleCommunicator>().enabled = true;
+>             }
+>             bicycleCommunicator = this.gameObject.GetComponent<BicycleCommunicator>();
+58,65c67,68
+<             this.GetComponent<Requester>().OnRequestCompleted += HandleSpeedChange;
+<             this.gameObject.GetComponent<Requester>().Get("http://192.168.2.1:5000/");
+<         }
+<         private void HandleSpeedChange(string response)
+<         {
+<             this.GetComponent<Requester>().OnRequestCompleted -= HandleSpeedChange;
+<             Debug.Log(response);
+<             this.speed = float.Parse(response);
+---
+>             // we now read the speed from the listener which updates the speed value by listening to ESP broadcast packets 
+>             this.speed = bicycleCommunicator.GetDetails().Speed;
