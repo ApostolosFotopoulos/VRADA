@@ -355,24 +355,9 @@ void setup() {
   scanForBLEDevices();
 
   // Setup the udp handler
-  if (udpListener.listen(IPAddress(192,168,1,14), 12345)) {
+  if (udpListener.listen(IPAddress(255, 255, 255, 255), 12346)) {
     Serial.println("UDP connected");
-    udpListener.onPacket([](AsyncUDPPacket packet){
-            Serial.print("UDP Packet Type: ");
-            Serial.print(packet.isBroadcast()?"Broadcast":packet.isMulticast()?"Multicast":"Unicast");
-            Serial.print(", From: ");
-            Serial.print(packet.remoteIP());
-            Serial.print(":");
-            Serial.print(packet.remotePort());
-            Serial.print(", To: ");
-            Serial.print(packet.localIP());
-            Serial.print(":");
-            Serial.print(packet.localPort());
-            Serial.print(", Length: ");
-            Serial.print(packet.length());
-            Serial.print(", Data: ");
-    });
-    // Send unicast
+    udpListener.onPacket(udpPacketHandler);
   }
 
   #ifdef GENERAL_DEBUG
@@ -392,5 +377,4 @@ void loop() {
         ->writeValue(details, sizeof(details), true);
   } 
  }
- delay(STANDARD_DELAY);
 }
