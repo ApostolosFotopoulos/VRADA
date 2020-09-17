@@ -286,7 +286,7 @@ void setup() {
   pBLEScan->setActiveScan(true);
   pBLEScan->start(5);
 
-  if (udpListener.listen(IPAddress(255, 255, 255, 255), 12346)) {
+  if (udpListener.listen(IPAddress(255, 255, 255, 255), 12345)) {
     Serial.println("UDP connected");
     udpListener.onPacket(udpPacketHandler);
     // Send unicast
