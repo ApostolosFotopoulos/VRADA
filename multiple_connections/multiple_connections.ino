@@ -6,11 +6,11 @@
 
 
 //Definitions
-#define SSID "nitlab-2.4G-2os"
-#define PASSWORD "nitlabuth"
+#define SSID "VRADA"
+#define PASSWORD "vrada1234"
 #define MAX_CLIENTS 2
 #define DEBUG
-#define STANDARD_DELAY 400
+#define STANDARD_DELAY 100
 #define BLE_SCAN_TIME 10
 
 //Global
@@ -57,7 +57,7 @@ void setupWiFi(){
   #endif 
   WiFi.begin(SSID,PASSWORD);
   while(WiFi.status() != WL_CONNECTED){
-    delay(STANDARD_DELAY);
+    delay(400);
     Serial.print(".");
   }
   #ifdef DEBUG
@@ -113,9 +113,9 @@ void connectClients(){
       #ifdef DEBUG
         Serial.printf("[SUCCESS] Connected to %s\n",TrackedClients[i]->toString().c_str());
       #endif
-      if(ConnectedClients[i]->toString() == "TOORX0086"){
+      if(TrackedClients[i]->toString() == "00:0c:bf:26:c1:1d"){
         int idx = mapTrackedToPredifinedIndex(i);
-        Serial.println(serviceUUIDs[idx].c_str());
+        Serial.println("At TOORX0086");
 
         Serial.println("[STATUS] PING1 Signal");
         ConnectedClients[connectedClients]
@@ -140,7 +140,7 @@ void connectClients(){
       
       } else {
         int idx = mapTrackedToPredifinedIndex(i);
-        Serial.println(serviceUUIDs[idx].c_str());
+        Serial.println("At TOORX0087");
         uint8_t val[] = {1};
         ConnectedClients[connectedClients]
           ->getService(BLEUUID(serviceUUIDs[idx]))
@@ -184,17 +184,26 @@ int counter = 2;
 void loop() {
   // put your main code here, to run repeatedly:
   for(int i=0;i<connectedClients;i++){
-    if(ConnectedClients[i]->toString() == "TOORX0086"){
-        int idx = mapTrackedToPredifinedIndex(i);
-        ConnectedClients[i]->getService(BLEUUID(serviceUUIDs[idx]))->getCharacteristic(BLEUUID(writeUUIDs[idx]))->writeValue(details, sizeof(details), true);
-      } else {
-        int idx = mapTrackedToPredifinedIndex(i);
+    if (!ConnectedClients[i]->isConnected()) {
+      continue;
+    }
+    Serial.printf("Writing at %s\n",ConnectedClients[i]->getPeerAddress().toString().c_str());
+    if(ConnectedClients[i]->getPeerAddress().toString() == "00:0c:bf:26:c1:1d"){
+      Serial.println("At toorx0086");
+      int idx = mapTrackedToPredifinedIndex(i);
+      ConnectedClients[i]->getService(BLEUUID(serviceUUIDs[idx]))->getCharacteristic(BLEUUID(writeUUIDs[idx]))->writeValue(details, sizeof(details), true);
+    }
+    
+    /*else {
+      Serial.println("At toorx0087");
+      int idx = mapTrackedToPredifinedIndex(i);
         
-        uint8_t val[] = {counter};
-        Serial.printf("Writing to the virtual: %d\n",counter);
-        ConnectedClients[i]->getService(BLEUUID(serviceUUIDs[idx]))->getCharacteristic(BLEUUID(writeUUIDs[idx]))->writeValue(val,1, true);
-        counter++;
-      }
+      uint8_t val[] = {counter};
+      Serial.printf("Writing to the virtual: %d\n",counter);
+      ConnectedClients[i]->getService(BLEUUID(serviceUUIDs[idx]))->getCharacteristic(BLEUUID(writeUUIDs[idx]))->writeValue(val,1, true);
+      counter++;
+      delay(800);
+    }**/
   }
-  delay(800);
+  delay(100);
 }

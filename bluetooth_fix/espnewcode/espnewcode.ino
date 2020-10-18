@@ -13,8 +13,8 @@ int status = WL_IDLE_STATUS;
 #define PASSWORD "vrada1234" // password of the wifi access point
 #define MAX_CLIENTS 1
 #define GENERAL_DEBUG // delete this line to disable general purpose debug
-//#define PACKETS_DEBUG // delete this line to disable packet transmit debug
-//#define NOTIFY_DEBUG 
+#define PACKETS_DEBUG // delete this line to disable packet transmit debug
+#define NOTIFY_DEBUG 
 #define STANDARD_DELAY 100 
 #define LOOP_DELAY 400
 #define WIFI_DELAY 500 // time after each attempt to connect
