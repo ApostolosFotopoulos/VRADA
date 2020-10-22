@@ -10,7 +10,7 @@
 // Definitions
 int status = WL_IDLE_STATUS;
 #define SSID "VRADA" // name of the wifi access point
-#define PASSWORD "vrada1234" // password of the wifi access point
+#define PASSWORD "Password123" // password of the wifi access point
 #define MAX_CLIENTS 1
 #define GENERAL_DEBUG // delete this line to disable general purpose debug
 #define PACKETS_DEBUG // delete this line to disable packet transmit debug
@@ -25,9 +25,9 @@ WiFiUDP udp;
 BLEScan* pBLEScan; // for the BLE scan 
 static uint8_t trackedClients = 0;  // number of clients that we found and we will try to connect
 static uint8_t connectedClients = 0;  // number of bluetooth clients that we are currently connected
-static std::string PredefinedTOORXAddresses[] = {"00:0c:bf:26:c1:1d"};
-static std::string PredefinedReceivers[] = {"2c:26:17:0d:3f:d7"};
-static std::string deviceNames[] = {"TOORX0086"};
+static std::string PredefinedTOORXAddresses[] = {"00:0c:bf:13:e4:a4"};
+static std::string PredefinedReceivers[] = {"2c:26:17:11:fa:17"};
+static std::string deviceNames[] = {"TOORX0001"};
 static uint8_t predefinedClients = 1; 
 static BLEAddress* TrackedClients[MAX_CLIENTS]; // Addresses that we tracked
 static BLEClient* ConnectedClients[MAX_CLIENTS]; // Addresses of the client that connect
@@ -340,7 +340,7 @@ void connectWithTheTrackedDevices(){
 //-----------------------------------------------------------  Setup & Loop  -----------------------------------------------------------//
 void setup() {
   Serial.begin(9600); // Start with 9600 speed
-  while (!Serial);
+  //while (!Serial);
   
   #ifdef GENERAL_DEBUG
     delay(STANDARD_DELAY);
