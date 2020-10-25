@@ -1,11 +1,20 @@
 import React from 'react';
-import { Row, Col } from 'antd';
+import Grid from '@material-ui/core/Grid';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import '../static/css/Loading.css';
 
-const Loading = () => (
-  <Row>
-    <Col span={24}>
-      <h1 className="">VRADA</h1>
-    </Col>
-  </Row>
-);
+function Loading() {
+  return (
+    <div className="loading-div">
+      <div>
+        <Grid container>
+          <Grid item xs={12}>
+            <CircularProgress />
+          </Grid>
+        </Grid>
+      </div>
+    </div>
+  );
+}
+
 export default Loading;
