@@ -1,31 +1,31 @@
-const HtmlWebPackPlugin = require( 'html-webpack-plugin' );
-const path = require( 'path' );
-const webpack = require('webpack')
+const HtmlWebPackPlugin = require('html-webpack-plugin');
+const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
-  mode:'development',
+  mode: 'development',
   entry: [
     'webpack-dev-server/client?http://0.0.0.0:8080',
     './src/index.js',
   ],
   output: {
-    path: path.resolve( __dirname, '../dist' ),
-    filename:'main.chunk.js',
-    publicPath: '/'
-  },
-  devServer:{
+    path: path.resolve(__dirname, '../dist'),
+    filename: 'main.chunk.js',
     publicPath: '/',
-    hot:true,
-    contentBase:'../dist'
+  },
+  devServer: {
+    publicPath: '/',
+    hot: true,
+    contentBase: '../dist',
   },
   module: {
     rules: [
       {
         test: /\.(js|jsx)$/,
-        exclude: [path.resolve(__dirname, "../node_modules")],
+        exclude: [path.resolve(__dirname, '../node_modules')],
         use: {
-          loader: "babel-loader"
-        }
+          loader: 'babel-loader',
+        },
       },
       {
         test: /\.css$/,
@@ -33,28 +33,27 @@ module.exports = {
       },
       {
         test: /\.(png|j?g|svg|gif)?$/,
-        use: 'file-loader'
+        use: 'file-loader',
       },
       {
         test: /\.less$/,
         use: [
-          {loader: "style-loader"},
-          {loader: "css-loader"},
-          {loader: "less-loader",
-          }
-        ]
-    }
-    ]
-   },
+          { loader: 'style-loader' },
+          { loader: 'css-loader' },
+          { loader: 'less-loader' },
+        ],
+      },
+    ],
+  },
   plugins: [
     new HtmlWebPackPlugin({
-      template: path.resolve( __dirname, '../public/index.html' ),
+      template: path.resolve(__dirname, '../public/index.html'),
       filename: 'index.html',
-      inject:true
+      inject: true,
     }),
     new webpack.HotModuleReplacementPlugin(),
   ],
-  optimization:{
-    minimize:true
-  }
+  optimization: {
+    minimize: true,
+  },
 };
