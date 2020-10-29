@@ -7,11 +7,11 @@ module.exports = {
     './src/index.js',
   ],
   output: {
-    path: path.resolve(__dirname, '../dist'),
-    filename: './main.js',
+    path: path.resolve(__dirname, '../build'),
+    filename: './electron.js',
   },
   devServer: {
-    contentBase: '../dist',
+    contentBase: '../build',
   },
   module: {
     rules: [

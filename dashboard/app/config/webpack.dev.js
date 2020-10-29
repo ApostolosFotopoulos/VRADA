@@ -9,14 +9,14 @@ module.exports = {
     './src/index.js',
   ],
   output: {
-    path: path.resolve(__dirname, '../dist'),
-    filename: 'main.chunk.js',
+    path: path.resolve(__dirname, '../build'),
+    filename: './electron.js',
     publicPath: '/',
   },
   devServer: {
     publicPath: '/',
     hot: true,
-    contentBase: '../dist',
+    contentBase: '../build',
   },
   module: {
     rules: [

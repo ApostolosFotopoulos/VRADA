@@ -1,0 +1,29 @@
+[{
+  "background": "#DDBD59",
+  "color": "#fff",
+  "label": "Ταχύτητα"
+},{
+  "background": "#D96D4B",
+  "color": "#fff",
+  "label": "RPM"
+},{
+  "background": "#C23742",
+  "color": "#fff",
+  "label": "Απόσταση"
+},{
+  "background": "#56423A",
+  "color": "#fff",
+  "label": "Θερμίδες"
+},{
+  "background": "#159CAA",
+  "color": "#fff",
+  "label": "Κ.Παλμοί"
+},{
+  "background": "#696D77",
+  "color": "#fff",
+  "label": "Ισχύς"
+},{
+  "background": "#9EBC4A",
+  "color": "#fff",
+  "label": "Επίπεδο"
+}]

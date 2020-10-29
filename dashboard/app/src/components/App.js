@@ -11,7 +11,6 @@ function App() {
 
   const checkTheWifi = () => {
     const url = queryString.parse(window.location.search);
-    console.log(url.ssid);
     if (url.ssid.toUpperCase().includes('VRADA')) {
       return true;
     }
