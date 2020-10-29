@@ -11,7 +11,8 @@ let CSV_FILENAME = '';
 let UDP_PACKET = [0, 0, 0, 0, 0, 0, 0];
 
 // Create the udp listener
-const eventListener = new UDPListener().Listen();
+const listener = new UDPListener();
+const eventListener = listener.Listen();
 eventListener.on('UDP_PACKETS', (packet) => {
   // Split the packet info
   if (WRITE_TO_CSV && CSV_FILENAME) {
@@ -96,6 +97,7 @@ app.whenReady().then(createWindow);
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
+    listener.Destroy();
   }
 });
 
