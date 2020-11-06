@@ -7,7 +7,7 @@ module.exports = {
       await WiFiControl.init();
       return await WiFiControl.getIfaceState().ssid;
     } catch (e) {
-      console.log(e);
+      return undefined;
     }
   },
 };

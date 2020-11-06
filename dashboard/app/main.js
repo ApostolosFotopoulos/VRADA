@@ -1,14 +1,16 @@
+/* eslint-disable array-callback-return */
 const {
   app, BrowserWindow, ipcMain, dialog,
 } = require('electron');
 const fs = require('fs');
 const { getSSID } = require('./utils/ssid');
 const UDPListener = require('./utils/UDPListener');
-const { isWifiChanged } = require('./utils/wifi');
 
 let WRITE_TO_CSV = false;
 let CSV_FILENAME = '';
 let UDP_PACKET = [0, 0, 0, 0, 0, 0, 0];
+const UDP_PACKETS = [];
+let UDP_METADATA = UDP_PACKET.map(() => ({ sum: 0, instances: 0 }));
 
 // Create the udp listener
 const listener = new UDPListener();
@@ -25,7 +27,16 @@ eventListener.on('UDP_PACKETS', (packet) => {
     const d = `${new Date().toLocaleTimeString()},${packetData[1]},${packetData[2].split(':')[1]},${packetData[3].split(':')[1]},`
           + `${packetData[4].split(':')[1]},${packetData[5].split(':')[1]},${packetData[6].split(':')[1]},${packetData[7].split(':')[1]},`
           + `${packetData[8].split(':')[1]}\n`;
-    fs.appendFileSync(CSV_FILENAME, d);
+
+    // Push to the packets
+    UDP_PACKETS.push(d);
+
+    // Update the meta data of the packets
+    UDP_METADATA = UDP_METADATA.map((it, idx) => ({
+      sum: Number(packetData[idx + 2].split(':')[1]) > 0 ? Number(it.sum) + Number(packetData[idx + 2].split(':')[1]) : Number(it.sum),
+      instances: Number(packetData[idx + 2].split(':')[1]) > 0 ? Number(it.instances) + 1 : Number(it.instances),
+    }));
+    console.log(UDP_METADATA);
   } else {
     UDP_PACKET = [0, 0, 0, 0, 0, 0, 0];
   }
@@ -45,12 +56,11 @@ async function createWindow() {
   });
 
   if (process.env.NODE_ENV === 'development') {
-    const winURL = `http://localhost:8080?ssid=${await getSSID()}`;
+    const winURL = 'http://localhost:8080';
     win.loadURL(winURL);
     win.webContents.openDevTools();
   } else {
-    const ssid = await getSSID();
-    win.loadFile(`${__dirname}/build/index.html`, { query: { ssid } });
+    win.loadFile(`${__dirname}/build/index.html`);
   }
 
   // Start the write to csv
@@ -76,6 +86,12 @@ async function createWindow() {
   // Stop the write to csv
   ipcMain.on('STOP_WRITE', () => {
     WRITE_TO_CSV = false;
+    if (UDP_PACKETS.length > 0) {
+      fs.appendFileSync(CSV_FILENAME, `-,-,${UDP_METADATA.map((i) => ((i.sum / i.instances) || 0).toFixed(2)).join(',')}\n`);
+      UDP_PACKETS.map((i) => {
+        fs.appendFileSync(CSV_FILENAME, i);
+      });
+    }
     CSV_FILENAME = '';
   });
 
@@ -88,8 +104,14 @@ async function createWindow() {
     }
   }, UDP_PACKET);
 
-  // Interval that checks the wifi changes
-  isWifiChanged(win);
+  // Send the status of the wifi to the frontend
+  ipcMain.on('FETCH_WIFI_STATUS', async (e) => {
+    try {
+      e.reply('WIFI_STATUS', await getSSID());
+    } catch (err) {
+      dialog.showErrorBox('Σφάλμα', 'Σφάλμα στην σύνδεση');
+    }
+  });
 }
 
 app.whenReady().then(createWindow);

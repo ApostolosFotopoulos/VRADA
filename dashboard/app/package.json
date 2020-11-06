@@ -12,6 +12,7 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "csv-parse": "^4.12.0",
     "file-loader": "^6.1.1",
     "npm-run-all": "^4.1.5",
     "query-string": "^6.13.6",
@@ -26,9 +27,9 @@
     "electron:dev": "electron .",
     "start": "NODE_ENV=production npm-run-all -s app:prod electron:dev",
     "dev": "NODE_ENV=development npm-run-all -p electron:dev app:dev",
-    "build:win":"electron-builder build --win",
-    "build:mac":"electron-builder build --mac",
-    "build:linux":"electron-builder build --linux",
+    "build:win": "electron-builder build --win",
+    "build:mac": "electron-builder build --mac",
+    "build:linux": "electron-builder build --linux",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -76,7 +77,7 @@
   },
   "build": {
     "appId": "vrada-dashboard",
-    "productName":"VRADA-Dashboard",
+    "productName": "VRADA-Dashboard",
     "files": [
       "build/**/*",
       "node_modules/**/*",
@@ -84,17 +85,17 @@
       "icons/**/*",
       "main.js"
     ],
-    "extraMetadata":{
-      "main":"main.js"
+    "extraMetadata": {
+      "main": "main.js"
     },
-    "mac":{
-      "icon":"icons/icon.png"
+    "mac": {
+      "icon": "icons/icon.png"
     },
-    "win":{
-      "icon":"icons/icon.png"
+    "win": {
+      "icon": "icons/icon.png"
     },
-    "linux":{
-      "icon":"icons/icon.png"
+    "linux": {
+      "icon": "icons/icon.png"
     }
   }
 }
