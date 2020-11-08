@@ -47,7 +47,7 @@ function MainDisplay() {
         stopWrite={stopWrite}
         isPlaying={isPlaying}
       />
-      <Grid container spacing={4} style={{ marginTop: '2%' }}>
+      <Grid container spacing={4} style={{ marginTop: '2%', padding: '2%' }}>
         {renderBoxes()}
       </Grid>
     </div>
