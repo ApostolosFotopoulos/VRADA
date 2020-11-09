@@ -7,7 +7,7 @@ module.exports = {
       await WiFiControl.init();
       return await WiFiControl.getIfaceState().ssid;
     } catch (e) {
-      return undefined;
+      return 'ETHERNET_TYPE'; // Not correct handling.NEED FIXING TO GET THE CONNECTED INTERFACE
     }
   },
 };
