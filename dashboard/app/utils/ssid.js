@@ -5,7 +5,7 @@ module.exports = {
   async getSSID() {
     try {
       await WiFiControl.init();
-      return await WiFiControl.getIfaceState().ssid;
+      return await WiFiControl.getIfaceState().ssid || 'ETHERNET_TYPE';
     } catch (e) {
       return 'ETHERNET_TYPE'; // Not correct handling.NEED FIXING TO GET THE CONNECTED INTERFACE
     }

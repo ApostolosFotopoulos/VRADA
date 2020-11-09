@@ -31,6 +31,8 @@ eventListener.on('UDP_PACKETS', (packet) => {
     // Push to the packets
     UDP_PACKETS.push(d);
 
+    console.log(d);
+
     // Update the meta data of the packets
     UDP_METADATA = UDP_METADATA.map((it, idx) => ({
       sum: Number(packetData[idx + 2].split(':')[1]) > 0 ? Number(it.sum) + Number(packetData[idx + 2].split(':')[1]) : Number(it.sum),
@@ -77,7 +79,7 @@ async function createWindow() {
       } else {
         CSV_FILENAME = res.filePath;
       }
-      fs.writeFileSync(CSV_FILENAME, 'Ημερομηνία,Συσκευή,Ταχύτητα,RPM,Απόσταση,Θερμίδες,Καρδιακοί Παλμοί,Ισχύς,Επίπεδο\n');
+      fs.writeFileSync(CSV_FILENAME, '\ufeffΗμερομηνία,Συσκευή,Ταχύτητα,RPM,Απόσταση,Θερμίδες,Καρδιακοί Παλμοί,Ισχύς,Επίπεδο\n', 'utf8');
     } catch (e) {
       dialog.showErrorBox('Σφάλμα', 'Σφάλμα κατά την αποθήκευση');
     }
@@ -87,9 +89,9 @@ async function createWindow() {
   ipcMain.on('STOP_WRITE', () => {
     WRITE_TO_CSV = false;
     if (UDP_PACKETS.length > 0) {
-      fs.appendFileSync(CSV_FILENAME, `-,-,${UDP_METADATA.map((i) => ((i.sum / i.instances) || 0).toFixed(2)).join(',')}\n`);
+      fs.appendFileSync(CSV_FILENAME, `\ufeff-,-,${UDP_METADATA.map((i) => ((i.sum / i.instances) || 0).toFixed(2)).join(',')}\n`, 'utf8');
       UDP_PACKETS.map((i) => {
-        fs.appendFileSync(CSV_FILENAME, i);
+        fs.appendFileSync(CSV_FILENAME, `\ufeff${i}`, 'utf8');
       });
     }
     CSV_FILENAME = '';

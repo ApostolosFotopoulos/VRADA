@@ -29,7 +29,9 @@ class UDPListener {
     */
     const _this = this;
     this.socket.on('message', (packet) => {
-      _this.eventEmitter.emit('UDP_PACKETS', packet);
+      if (_this.eventEmitter) {
+        _this.eventEmitter.emit('UDP_PACKETS', packet);
+      }
     });
     return this.eventEmitter;
   }
