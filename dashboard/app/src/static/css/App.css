@@ -7,3 +7,12 @@ html,body{
 ::-webkit-scrollbar {
   display: none;
 }
+.MuiList-root{
+  border-color: #282c34!important;
+  background-color: #282c34!important;
+  color: white!important;
+  border-radius: 0!important;
+}
+.MuiPopover-paper{
+  border-radius: 0!important;
+}
