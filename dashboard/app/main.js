@@ -9,8 +9,9 @@ const UDPListener = require('./utils/UDPListener');
 let WRITE_TO_CSV = false;
 let CSV_FILENAME = '';
 let UDP_PACKET = [0, 0, 0, 0, 0, 0, 0];
-const UDP_PACKETS = [];
+let UDP_PACKETS = [];
 let UDP_METADATA = UDP_PACKET.map(() => ({ sum: 0, instances: 0 }));
+let MAC_ADDRESS = '';
 
 // Create the udp listener
 const listener = new UDPListener();
@@ -20,25 +21,25 @@ eventListener.on('UDP_PACKETS', (packet) => {
   if (WRITE_TO_CSV && CSV_FILENAME) {
     const packetData = packet.toString().split(';');
 
-    // Update the UDP packet
-    UDP_PACKET = [packetData[2].split(':')[1], packetData[3].split(':')[1], packetData[4].split(':')[1],
-      packetData[5].split(':')[1], packetData[6].split(':')[1], packetData[7].split(':')[1], packetData[8].split(':')[1]];
+    // Only add a packet to the list when the MAC address is the chosen one
+    if (MAC_ADDRESS === packetData[1]) {
+      // Update the UDP packet
+      UDP_PACKET = [packetData[2].split(':')[1], packetData[3].split(':')[1], packetData[4].split(':')[1],
+        packetData[5].split(':')[1], packetData[6].split(':')[1], packetData[7].split(':')[1], packetData[8].split(':')[1]];
 
-    const d = `${new Date().toLocaleTimeString()},${packetData[1]},${packetData[2].split(':')[1]},${packetData[3].split(':')[1]},`
-          + `${packetData[4].split(':')[1]},${packetData[5].split(':')[1]},${packetData[6].split(':')[1]},${packetData[7].split(':')[1]},`
-          + `${packetData[8].split(':')[1]}\n`;
+      const d = `${new Date().toLocaleTimeString()},${packetData[1]},${packetData[2].split(':')[1]},${packetData[3].split(':')[1]},`
+            + `${packetData[4].split(':')[1]},${packetData[5].split(':')[1]},${packetData[6].split(':')[1]},${packetData[7].split(':')[1]},`
+            + `${packetData[8].split(':')[1]}\n`;
 
-    // Push to the packets
-    UDP_PACKETS.push(d);
+      // Push to the packets
+      UDP_PACKETS.push(d);
 
-    console.log(d);
-
-    // Update the meta data of the packets
-    UDP_METADATA = UDP_METADATA.map((it, idx) => ({
-      sum: Number(packetData[idx + 2].split(':')[1]) > 0 ? Number(it.sum) + Number(packetData[idx + 2].split(':')[1]) : Number(it.sum),
-      instances: Number(packetData[idx + 2].split(':')[1]) > 0 ? Number(it.instances) + 1 : Number(it.instances),
-    }));
-    console.log(UDP_METADATA);
+      // Update the meta data of the packets
+      UDP_METADATA = UDP_METADATA.map((it, idx) => ({
+        sum: Number(packetData[idx + 2].split(':')[1]) > 0 ? Number(it.sum) + Number(packetData[idx + 2].split(':')[1]) : Number(it.sum),
+        instances: Number(packetData[idx + 2].split(':')[1]) > 0 ? Number(it.instances) + 1 : Number(it.instances),
+      }));
+    }
   } else {
     UDP_PACKET = [0, 0, 0, 0, 0, 0, 0];
   }
@@ -95,11 +96,16 @@ async function createWindow() {
       });
     }
     CSV_FILENAME = '';
+    UDP_PACKETS = [];
+    MAC_ADDRESS = '';
+    UDP_METADATA = UDP_PACKET.map(() => ({ sum: 0, instances: 0 }));
   });
 
   // Send data to the frontend
-  ipcMain.on('FETCH_PACKET_DATA', async (e) => {
+  ipcMain.on('FETCH_PACKET_DATA', async (e, d) => {
     try {
+      // Update the desired Mac address
+      MAC_ADDRESS = d;
       e.reply('PACKET_DATA', UDP_PACKET);
     } catch (err) {
       dialog.showErrorBox('Σφάλμα', 'Σφάλμα κατά την μεταφορά πακέτων');
