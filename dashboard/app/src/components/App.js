@@ -15,7 +15,6 @@ function App() {
       ipcRenderer.send('FETCH_WIFI_STATUS');
     }, 1000, ipcRenderer);
     ipcRenderer.on('WIFI_STATUS', (e, d) => {
-      console.log(d)
       if ((d && d.includes('VRADA')) || (d && d.includes('ETHERNET_TYPE'))) {
         setLoading(false);
         setIsConnectedToVrada(true);
