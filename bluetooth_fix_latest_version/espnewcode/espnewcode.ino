@@ -10,7 +10,7 @@
 // Definitions
 int status = WL_IDLE_STATUS;
 #define SSID "VRADA" // name of the wifi access point
-#define PASSWORD "vrada1234" // password of the wifi access point
+#define PASSWORD "vrada2020" // password of the wifi access point
 #define MAX_CLIENTS 1
 #define GENERAL_DEBUG // delete this line to disable general purpose debug
 #define PACKETS_DEBUG // delete this line to disable packet transmit debug
@@ -264,10 +264,9 @@ void setupWifi(){
   #ifdef GENERAL_DEBUG
     Serial.print("[STATUS] Trying to connect to the ~VRADA~ AP...");
   #endif
-  // Connect to the wifi with ssid and password
-  while (status != WL_CONNECTED) {
-    status = WiFi.begin(SSID, PASSWORD);
-    delay(WIFI_DELAY);
+  WiFi.begin(SSID, PASSWORD);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
     Serial.print(".");
   }
   #ifdef GENERAL_DEBUG
