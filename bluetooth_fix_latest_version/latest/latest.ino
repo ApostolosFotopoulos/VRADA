@@ -18,7 +18,7 @@ int status = WL_IDLE_STATUS;
 #define STANDARD_DELAY 100 
 #define LOOP_DELAY 400
 #define WIFI_DELAY 500 // time after each attempt to connect
-#define BLE_SCAN_TIME 5// time that the scanner will scan
+#define BLE_SCAN_TIME 20// time that the scanner will scan
 
 // Global
 WiFiUDP udp;
